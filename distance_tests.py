@@ -43,7 +43,8 @@ print("\t unique codes:", len(hoh_codes2.index))
 print("\t in geo dataset:", len(hoh_codes2.loc[[x in list(samples.id) for x, y in hoh_codes2.index]].index))
 
 # load MLL dataset
-mll_survey = read_csv("./datasets/limbloss_extract2020apr2.csv")
+# mll_survey = read_csv("./datasets/limbloss_extract2020apr2.csv")
+mll_survey = read_csv("./datasets/edited MLL dataset_22April2020.csv")
 print("\n--- MLL SURVEY ---")
 
 # count of MLL

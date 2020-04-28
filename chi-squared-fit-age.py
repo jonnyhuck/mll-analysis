@@ -33,10 +33,11 @@ def create_bins(lower_bound, width, quantity):
 ''' OBSERVED VALUES '''
 
 # read in MLL dataset
-mll_survey = read_csv("./datasets/limbloss_extract2020apr2.csv")
+# mll_survey = read_csv("./datasets/limbloss_extract2020apr2.csv")
+mll_survey = read_csv("./datasets/edited MLL dataset_22April2020.csv")
 
 # report mean and SD
-# print(f"observed mean: {mll_survey.age.mean()}; SD: {mll_survey.age.std()}")
+print(f"observed mean: {mll_survey.age.mean()}; SD: {mll_survey.age.std()}")
 
 # sort age data into 10 year bins
 bin_width = 10

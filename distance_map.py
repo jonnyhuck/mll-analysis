@@ -20,8 +20,12 @@ def distance(o, d):
 
 
 # open datasets
-mll_survey = read_csv("./datasets/limbloss_extract2020apr2.csv")[['parish', 'hlthcare', 'contrib', 'rehabacs']]
+# mll_survey = read_csv("./datasets/limbloss_extract2020apr2.csv")[['parish', 'hlthcare', 'contrib', 'rehabacs']]
+mll_survey = read_csv("./datasets/edited MLL dataset_22April2020.csv")[['parish', 'hlthcare2', 'contrib', 'rehabacs']]
 parishes = read_file("/Users/jonnyhuck/Dropbox/Manchester/Research/Uganda/1.MLL-MRC-AHRC/data/acholi/parishes.shp")
+
+# There are lots of duplicated parish names
+# print(parishes[parishes.PNAME_2010.duplicated()])
 
 ''' DATA REPAIR '''
 
@@ -58,12 +62,20 @@ mll_survey.loc[mll_survey['parish'] == 'PUGODA', 'parish'] = 'PUGODA EAST'
 mll_survey.loc[mll_survey['parish'] == 'TECHO', 'parish'] = 'TECHO WARD'
 mll_survey.loc[mll_survey['parish'] == 'TEEGWANA', 'parish'] = 'TEGWANA WARD'
 mll_survey.loc[mll_survey['parish'] == 'TOWN PARISH', 'parish'] = 'TOWN BOARD'
+mll_survey.loc[mll_survey['parish'] == 'Bwebonam kal', 'parish'] = 'BWOBONAM'
+mll_survey.loc[mll_survey['parish'] == 'Bwobonam', 'parish'] = 'BWOBONAM'
+mll_survey.loc[mll_survey['parish'] == 'Ongom ward', 'parish'] = 'OGOM'
+mll_survey.loc[mll_survey['parish'] == 'Pabali', 'parish'] = 'PABALI'
+mll_survey.loc[mll_survey['parish'] == 'Patira', 'parish'] = 'PATIRA'
+mll_survey.loc[mll_survey['parish'] == 'Todora', 'parish'] = 'TODORA'
+mll_survey.loc[mll_survey['parish'] == 'agonga A', 'parish'] = 'AGONGA'
+mll_survey.loc[mll_survey['parish'] == 'pabit', 'parish'] = 'PABIT'
 
 # report matches
-print(len(mll_survey.parish.unique()))
-print(sum(el in list(mll_survey.parish.unique()) for el in list(parishes.PNAME_2010.unique())))
-print()
-
+# print(len(mll_survey.parish.unique()))
+# print(sum(el in list(mll_survey.parish.unique()) for el in list(parishes.PNAME_2010.unique())))
+# print()
+#
 # # report missing
 # missing = []
 # for i in mll_survey.parish.unique():
@@ -72,6 +84,7 @@ print()
 # print(sorted(missing))
 # print()
 # print(sorted(list(parishes.PNAME_2010.unique())))
+# exit()
 
 # transform health parameters to y/n (not required)
 # mll_survey.loc[mll_survey['hlthcare'] == 'No', 'hlthcare'] = 'False'
@@ -95,18 +108,22 @@ parishes['distance'] = parishes.geometry.apply(lambda x: distance(x.centroid.coo
 # count mll per parish
 mll = mll_survey.parish.value_counts(dropna=False)
 mll_counts = DataFrame(data={'name': list(mll.index), 'mll': list(mll)})
+print(f"MLL Sufferers: {mll.sum()}")
 
 # count never accessed healthcare per parish
-healthcare = mll_survey.loc[mll_survey['hlthcare'] == 'No'].parish.value_counts(dropna=False)
+healthcare = mll_survey.loc[mll_survey['hlthcare2'] == 'Never'].parish.value_counts(dropna=False)
 healthcare_counts = DataFrame(data={'name': list(healthcare.index), 'healthcare': list(healthcare)})
+print(f"never accessed healthcare (6 months): {healthcare.sum()} / {mll_survey['hlthcare2'].count()} ({healthcare.sum() / mll_survey['hlthcare2'].count() * 100:.1f}%)")
 
-# # count never accessed assistive device per parish
+# count never accessed assistive device per parish
 device = mll_survey.loc[mll_survey['contrib'] == 'Never'].parish.value_counts(dropna=False)
 device_counts = DataFrame(data={'name': list(device.index), 'device': list(device)})
+print(f"never accessed assistive device (6 months): {device.sum()} / {mll_survey['contrib'].count()} ({device.sum() / mll_survey['contrib'].count() * 100:.1f}%)")
 
 # # count never accessed rehab services per parish
 rehab = mll_survey.loc[mll_survey['rehabacs'] == 'Never'].parish.value_counts(dropna=False)
 rehab_counts = DataFrame(data={'name': list(rehab.index), 'rehab': list(rehab)})
+print(f"never accessed rehab (6 months): {rehab.sum()} / {mll_survey['rehabacs'].count()} ({rehab.sum() / mll_survey['rehabacs'].count() * 100:.1f}%)")
 
 # join count results to parish dataset (bodge to get around index problem)
 parishes1 = parishes.merge(mll_counts, how='left', left_on=parishes.PNAME_2010, right_on=mll_counts.name)
@@ -119,6 +136,8 @@ parishes['mll'] = parishes1['mll']
 parishes['healthcare'] = parishes2['healthcare']
 parishes['device'] = parishes3['device']
 parishes['rehab'] = parishes4['rehab']
+
+print(f"located MLL sufferers: {parishes['mll'].sum()} / {mll.sum()} ({parishes['mll'].sum() / mll.sum() * 100:.1f}%)")
 
 # swap na for 0 in the count columns
 parishes.fillna(value={'mll':0, 'healthcare':0, 'device':0, 'rehab':0}, inplace=True)

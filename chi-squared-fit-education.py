@@ -23,7 +23,8 @@ from pandas import read_csv, DataFrame
 ''' OBSERVED VALUES '''
 
 # read in MLL dataset and extract education bins
-mll_survey = read_csv("./datasets/limbloss_extract2020apr2.csv")
+# mll_survey = read_csv("./datasets/limbloss_extract2020apr2.csv")
+mll_survey = read_csv("./datasets/edited MLL dataset_22April2020.csv")
 # mll_ed = mll_survey.educ.value_counts()
 
 # loop through each row
