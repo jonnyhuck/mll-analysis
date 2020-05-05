@@ -106,7 +106,7 @@ print("")
 
 # init plot
 fig, axes = plt.subplots(figsize=(15, 10), nrows=1, ncols=3)
-fig.suptitle('Distribution of Distance to GROW for sample locations', fontsize=16)
+# fig.suptitle('Distribution of Distance to GROW for sample locations', fontsize=16)
 
 # create bin labels
 # labels = array([f"{int(x/1000)} - {int((x+10000)/1000)}" for x in range(0, 170000, 10000)])
@@ -151,4 +151,4 @@ plt.axhline(y=0, linewidth=0.5, color='k')
 plt.title('Difference')
 
 # output image
-plt.savefig('./out/distance_mll_parish.png')
+plt.savefig('./out/distance_mll_parish.png', dpi=300)

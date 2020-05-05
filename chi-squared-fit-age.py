@@ -15,9 +15,10 @@
     ----------
     Reject H0: The distributions do not match (p=0.000000)
 """
-from numpy import zeros, array, mean, std
+
 import matplotlib.pyplot as plt
-from scipy.stats import chisquare, shapiro
+from scipy.stats import chisquare, shapiro, ttest_ind
+from numpy import zeros, array, mean, std
 from pandas import read_csv, DataFrame, IntervalIndex, cut, value_counts
 
 
@@ -57,9 +58,16 @@ census = read_csv("./datasets/census/age.csv")
 # extract year of interest, transpose and convert to floats (removing thousand separators)
 census2018 = census['2018'].T.iloc[:81].apply(lambda x: int(x.replace(",", "")))
 
+# a more efficient way of getting the mean
+# test = census[['Age/Year', '2018']]
+# test['2018'] = census['2018'].T.iloc[:81].apply(lambda x: int(x.replace(",", "")))
+# mean = (test['Age/Year']*test['2018']).sum()/test['2018'].sum()
+# print((test['Age/Year']*test['2018']).sum(), test['2018'].sum(), mean)
+# exit()
+
 # assign counts to bins
 expected = list(zeros(9))
-ages = []
+# ages = []
 for i, x in census2018.iteritems():
     expected[int(i/bin_width)] += x
     # ages += [i for j in range(x)]
@@ -91,7 +99,7 @@ print("")
 
 # init plot
 fig, axes = plt.subplots(figsize=(15, 8), nrows=1, ncols=3)
-fig.suptitle('Distribution of Ages for MLL sufferers', fontsize=16)
+# fig.suptitle('Distribution of Ages for MLL sufferers', fontsize=16)
 
 # create bin labels
 labels = array(list(range(0, 90, 10)))
@@ -131,4 +139,4 @@ plt.axhline(y=0, linewidth=0.5, color='k')
 plt.title('Difference')
 
 # output image
-plt.savefig('./out/age.png')
+plt.savefig('./out/age.png', dpi=300)

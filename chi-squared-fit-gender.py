@@ -69,7 +69,7 @@ print("")
 
 # init plot
 fig, axes = plt.subplots(figsize=(17, 8), nrows=1, ncols=3)
-fig.suptitle('Distribution of Genders for MLL sufferers', fontsize=16)
+# fig.suptitle('Distribution of Genders for MLL sufferers', fontsize=16)
 
 # create bin labels
 labels = array(['Male', 'Female'])
@@ -107,4 +107,4 @@ plt.ylim([-60, 60])
 plt.axhline(y=0, linewidth=0.5, color='k')
 plt.title('Difference')
 
-plt.savefig('./out/gender.png')
+plt.savefig('./out/gender.png', dpi=300)
