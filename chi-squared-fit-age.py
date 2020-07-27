@@ -5,6 +5,12 @@
 * https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.chisquare.html
 * https://colorswall.com/images/palettes/bootstrap-4-colors-3-colorswall.png
 *
+* Also tried wilcoxon rank sums and mann-whitney U, but rhis is not appropriate as the
+*   ages have been categorised (binned)
+* https://statistics.laerd.com/statistical-guides/mann-whitney-u-test-assumptions.php
+* https://machinelearningmastery.com/nonparametric-statistical-significance-tests-in-python/
+* https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.ranksums.html
+*
 * Census Data:
 * https://www.ubos.org/explore-statistics/statistical-datasets/6133/
 *
@@ -17,9 +23,9 @@
 """
 
 import matplotlib.pyplot as plt
-from scipy.stats import chisquare, shapiro, ttest_ind
-from numpy import zeros, array, mean, std
+from numpy import zeros, array, median
 from pandas import read_csv, DataFrame, IntervalIndex, cut, value_counts
+from scipy.stats import chisquare, mannwhitneyu, ranksums, median_absolute_deviation
 
 
 def create_bins(lower_bound, width, quantity):
@@ -34,11 +40,10 @@ def create_bins(lower_bound, width, quantity):
 ''' OBSERVED VALUES '''
 
 # read in MLL dataset
-# mll_survey = read_csv("./datasets/limbloss_extract2020apr2.csv")
 mll_survey = read_csv("./datasets/edited MLL dataset_22April2020.csv")
 
-# report mean and SD
-print(f"observed mean: {mll_survey.age.mean()}; SD: {mll_survey.age.std()}")
+# report median
+print(f"observed median: {mll_survey.age.median()}; MAD: {mll_survey.age.mad()}")
 
 # sort age data into 10 year bins
 bin_width = 10
@@ -70,10 +75,10 @@ expected = list(zeros(9))
 # ages = []
 for i, x in census2018.iteritems():
     expected[int(i/bin_width)] += x
-    # ages += [i for j in range(x)]
+#     ages += [i for j in range(x)]
 
-# report mean and SD
-# print(f"expected mean: {mean(ages)}; SD: {std(ages)}")
+# report median and mad
+# print(f"expected median: {median(ages)}; SD: {median_absolute_deviation(ages)}")
 # ages = None
 
 # scale to get expected values
@@ -94,6 +99,25 @@ if (p < 0.05):
 else:
     print(f"Cannot Reject H0, difference not significant (p={p:.6f})")
 print("")
+
+
+# get mann-whitney U and p value
+# not sure if I should be defining the alternative hypothesis or not
+# mwu, mwu_p = mannwhitneyu(observed, expected, alternative='greater')
+# mwu, mwu_p = ranksums(observed, expected)
+
+# output to console
+# print("")
+# print(mwu, mwu_p)
+# print("----------")
+# if (mwu_p < 0.05):
+#     print(f"Reject H0: The distributions do not match (p={mwu_p:.6f})")
+# else:
+#     print(f"Cannot Reject H0, difference not significant (p={mwu_p:.6f})")
+# print("")
+#
+# exit()
+
 
 ''' PLOT '''
 

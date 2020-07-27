@@ -105,7 +105,7 @@ print("")
 ''' PLOT '''
 
 # init plot
-fig, axes = plt.subplots(figsize=(15, 10), nrows=1, ncols=3)
+fig, axes = plt.subplots(figsize=(15, 8), nrows=1, ncols=3)
 # fig.suptitle('Distribution of Distance to GROW for sample locations', fontsize=16)
 
 # create bin labels
