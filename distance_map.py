@@ -75,8 +75,8 @@ mll_survey.loc[mll_survey['parish'] == 'pabit', 'parish'] = 'PABIT'
 # print(len(mll_survey.parish.unique()))
 # print(sum(el in list(mll_survey.parish.unique()) for el in list(parishes.PNAME_2010.unique())))
 # print()
-#
-# # report missing
+
+# report missing
 # missing = []
 # for i in mll_survey.parish.unique():
 #     if i not in list(parishes.PNAME_2010.unique()):
