@@ -163,4 +163,4 @@ plt.axhline(y=0, linewidth=0.5, color='k')
 plt.title('Difference')
 
 # output image
-plt.savefig('./out/age.png', dpi=300)
+plt.savefig('./out/age.png', dpi=300, bbox_inches='tight')

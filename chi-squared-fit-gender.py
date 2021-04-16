@@ -107,4 +107,4 @@ plt.ylim([-60, 60])
 plt.axhline(y=0, linewidth=0.5, color='k')
 plt.title('Difference')
 
-plt.savefig('./out/gender.png', dpi=300)
+plt.savefig('./out/gender.png', dpi=300, bbox_inches='tight')

@@ -92,14 +92,14 @@ chi2, p = chisquare(observed, f_exp=expected)
 
 # output to console
 print("")
-print(observed)
-print(expected)
-print(chi2, p)
+print(f'observed: {observed}')
+print(f'expected: {expected}')
+print(f'X2: {chi2}, p:{p}')
 print("----------")
 if (p < 0.05):
-    print(f"Reject H0: The distributions do not match (p={p:.6f})")
+    print(f"Reject H0 (0.05): The distributions do not match (p={p:.6f})")
 else:
-    print(f"Cannot Reject H0, difference not significant (p={p:.6f})")
+    print(f"Cannot Reject H0 (0.05), difference not significant (p={p:.6f})")
 print("")
 
 ''' PLOT '''
@@ -151,4 +151,4 @@ plt.axhline(y=0, linewidth=0.5, color='k')
 plt.title('Difference')
 
 # output image
-plt.savefig('./out/distance_mll_parish.png', dpi=300)
+plt.savefig('./out/distance_mll_parish.png', dpi=300, bbox_inches='tight')
